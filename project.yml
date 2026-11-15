@@ -1,0 +1,49 @@
+name: ValorantTracker
+options:
+  bundleIdPrefix: dev.luisnv
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: true
+
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    TARGETED_DEVICE_FAMILY: "1"
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+
+targets:
+  ValorantTracker:
+    type: application
+    platform: iOS
+    sources:
+      - ValorantTracker
+    info:
+      path: ValorantTracker/Resources/Info.plist
+      properties:
+        CFBundleDisplayName: Tracker
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+          UISceneConfigurations:
+            UIWindowSceneSessionRoleApplication:
+              - UISceneConfigurationName: Default Configuration
+                UISceneDelegateClassName: $(PRODUCT_MODULE_NAME).SceneDelegate
+        NSAppTransportSecurity:
+          NSAllowsLocalNetworking: true
+    scheme:
+      testTargets:
+        - ValorantTrackerTests
+
+  ValorantTrackerTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - ValorantTrackerTests
+    dependencies:
+      - target: ValorantTracker
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
