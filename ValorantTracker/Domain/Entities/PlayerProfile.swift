@@ -1,7 +1,7 @@
 import Foundation
 
-/// Mirrors PlayerProfileResponse in the backend.
-struct PlayerProfile: Decodable, Equatable {
+/// A player as the app understands it. No networking or UI concerns here.
+struct PlayerProfile: Equatable {
     let puuid: String
     let name: String
     let tag: String

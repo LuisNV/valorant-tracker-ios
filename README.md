@@ -17,18 +17,28 @@ Chạy backend trước, rồi Run trên Simulator. Nếu chạy trên máy th�
 
 ## Cấu trúc
 
+MVVM + Clean Architecture. Phụ thuộc chỉ đi một chiều: Presentation → Domain ← Data.
+
 ```
 ValorantTracker
-├── App/        AppDelegate, SceneDelegate, AppCoordinator (điều hướng)
-├── Core/       APIClient, APIError, AppConfig, Theme
-├── Models/     RiotID, PlayerProfile, MatchSummary (khớp DTO của backend)
-├── Services/   PlayerService (protocol + bản gọi API)
-└── Features/
-    ├── Search/   nhập Riot ID
-    ├── Profile/  hồ sơ người chơi
-    └── Matches/  danh sách trận (UITableView + diffable data source)
-ValorantTrackerTests  test parse Riot ID và decode JSON
+├── App/            AppDelegate, SceneDelegate, AppCoordinator, AppDIContainer, AppConfig
+├── Domain/         Swift thuần, không import UIKit hay gọi mạng
+│   ├── Entities/       RiotID, PlayerProfile, MatchSummary
+│   ├── Repositories/   PlayerRepository (protocol)
+│   └── UseCases/       GetPlayerProfileUseCase, GetRecentMatchesUseCase
+├── Data/           Hiện thực các protocol của Domain
+│   ├── Network/        APIClient, APIError
+│   ├── DTOs/           PlayerProfileDTO, MatchSummaryDTO (+ toDomain)
+│   └── Repositories/   APIPlayerRepository
+└── Presentation/   MVVM: mỗi màn một ViewController + ViewModel
+    ├── Common/         Theme
+    ├── Search/
+    ├── Profile/
+    └── Matches/
+ValorantTrackerTests  test parse Riot ID và decode DTO
 ```
+
+Thêm tính năng mới theo thứ tự: entity và protocol repository trong Domain, use case, DTO và repository trong Data, rồi ViewModel và ViewController, cuối cùng nối trong `AppDIContainer`.
 
 ## Việc cần làm tiếp
 

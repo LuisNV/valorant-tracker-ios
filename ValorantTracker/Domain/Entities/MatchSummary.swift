@@ -1,7 +1,7 @@
 import Foundation
 
-/// Mirrors MatchSummaryResponse in the backend.
-struct MatchSummary: Decodable, Hashable {
+/// One match result for a player. Hashable so lists can diff it.
+struct MatchSummary: Hashable {
     let matchId: String
     let map: String
     let mode: String

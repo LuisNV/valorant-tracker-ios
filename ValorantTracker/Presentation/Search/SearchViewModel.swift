@@ -16,10 +16,10 @@ final class SearchViewModel {
     var onStateChange: ((State) -> Void)?
     var onFound: ((RiotID, PlayerProfile) -> Void)?
 
-    private let playerService: PlayerService
+    private let getPlayerProfile: GetPlayerProfileUseCase
 
-    init(playerService: PlayerService) {
-        self.playerService = playerService
+    init(getPlayerProfile: GetPlayerProfileUseCase) {
+        self.getPlayerProfile = getPlayerProfile
     }
 
     func search(text: String) {
@@ -32,7 +32,7 @@ final class SearchViewModel {
         state = .loading
         Task {
             do {
-                let profile = try await playerService.profile(for: riotID)
+                let profile = try await getPlayerProfile.execute(riotID: riotID)
                 state = .idle
                 onFound?(riotID, profile)
             } catch {

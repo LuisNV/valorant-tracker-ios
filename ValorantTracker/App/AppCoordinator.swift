@@ -5,16 +5,16 @@ import UIKit
 final class AppCoordinator {
 
     private let window: UIWindow
-    private let playerService: PlayerService
+    private let container: AppDIContainer
     private let navigationController = UINavigationController()
 
-    init(window: UIWindow, playerService: PlayerService) {
+    init(window: UIWindow, container: AppDIContainer) {
         self.window = window
-        self.playerService = playerService
+        self.container = container
     }
 
     func start() {
-        let viewModel = SearchViewModel(playerService: playerService)
+        let viewModel = container.makeSearchViewModel()
         viewModel.onFound = { [weak self] riotID, profile in
             self?.showProfile(riotID: riotID, profile: profile)
         }
@@ -24,7 +24,7 @@ final class AppCoordinator {
     }
 
     private func showProfile(riotID: RiotID, profile: PlayerProfile) {
-        let viewController = ProfileViewController(viewModel: ProfileViewModel(profile: profile))
+        let viewController = ProfileViewController(viewModel: container.makeProfileViewModel(profile: profile))
         viewController.onShowMatches = { [weak self] in
             self?.showMatches(riotID: riotID)
         }
@@ -32,7 +32,7 @@ final class AppCoordinator {
     }
 
     private func showMatches(riotID: RiotID) {
-        let viewModel = MatchesViewModel(riotID: riotID, playerService: playerService)
+        let viewModel = container.makeMatchesViewModel(riotID: riotID)
         navigationController.pushViewController(MatchesViewController(viewModel: viewModel), animated: true)
     }
 }

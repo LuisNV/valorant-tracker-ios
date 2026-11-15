@@ -13,11 +13,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = scene as? UIWindowScene else { return }
 
         let window = UIWindow(windowScene: windowScene)
-        let apiClient = APIClient(baseURL: AppConfig.baseURL)
-        let coordinator = AppCoordinator(
-            window: window,
-            playerService: APIPlayerService(client: apiClient)
-        )
+        let coordinator = AppCoordinator(window: window, container: AppDIContainer())
         coordinator.start()
 
         self.window = window

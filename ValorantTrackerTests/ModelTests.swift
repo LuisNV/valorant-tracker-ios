@@ -25,7 +25,7 @@ final class ModelTests: XCTestCase {
         let json = Data("""
         {"puuid":"abc","name":"SenNho","tag":"VN2","region":"ap","accountLevel":148}
         """.utf8)
-        let profile = try APIClient.makeDecoder().decode(PlayerProfile.self, from: json)
+        let profile = try APIClient.makeDecoder().decode(PlayerProfileDTO.self, from: json).toDomain()
         XCTAssertEqual(profile.accountLevel, 148)
         XCTAssertEqual(profile.region, "ap")
     }
@@ -37,7 +37,7 @@ final class ModelTests: XCTestCase {
         """
         for date in ["2026-11-15T10:00:00Z", "2026-11-15T10:00:00.123456Z"] {
             let json = Data(String(format: template, date).utf8)
-            let match = try APIClient.makeDecoder().decode(MatchSummary.self, from: json)
+            let match = try APIClient.makeDecoder().decode(MatchSummaryDTO.self, from: json).toDomain()
             XCTAssertEqual(match.map, "Ascent")
         }
     }

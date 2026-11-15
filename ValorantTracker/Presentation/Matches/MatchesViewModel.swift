@@ -16,18 +16,18 @@ final class MatchesViewModel {
     var onStateChange: ((State) -> Void)?
 
     let riotID: RiotID
-    private let playerService: PlayerService
+    private let getRecentMatches: GetRecentMatchesUseCase
 
-    init(riotID: RiotID, playerService: PlayerService) {
+    init(riotID: RiotID, getRecentMatches: GetRecentMatchesUseCase) {
         self.riotID = riotID
-        self.playerService = playerService
+        self.getRecentMatches = getRecentMatches
     }
 
     func load() {
         state = .loading
         Task {
             do {
-                let matches = try await playerService.recentMatches(for: riotID, limit: 20)
+                let matches = try await getRecentMatches.execute(riotID: riotID, limit: 20)
                 state = .loaded(matches)
             } catch {
                 state = .failed(message: error.localizedDescription)
