@@ -17,28 +17,29 @@ Chạy backend trước, rồi Run trên Simulator. Nếu chạy trên máy th�
 
 ## Cấu trúc
 
-MVVM + Clean Architecture. Phụ thuộc chỉ đi một chiều: Presentation → Domain ← Data.
+Chia theo tính năng, mỗi tính năng có đủ các tầng MVVM + Clean Architecture.
+Trong một tính năng, phụ thuộc chỉ đi một chiều: Presentation → Domain ← Data.
 
 ```
 ValorantTracker
-├── App/            AppDelegate, SceneDelegate, AppCoordinator, AppDIContainer, AppConfig
-├── Domain/         Swift thuần, không import UIKit hay gọi mạng
-│   ├── Entities/       RiotID, PlayerProfile, MatchSummary
-│   ├── Repositories/   PlayerRepository (protocol)
-│   └── UseCases/       GetPlayerProfileUseCase, GetRecentMatchesUseCase
-├── Data/           Hiện thực các protocol của Domain
-│   ├── Network/        APIClient, APIError
-│   ├── DTOs/           PlayerProfileDTO, MatchSummaryDTO (+ toDomain)
-│   └── Repositories/   APIPlayerRepository
-└── Presentation/   MVVM: mỗi màn một ViewController + ViewModel
-    ├── Common/         Theme
-    ├── Search/
-    ├── Profile/
+├── App/        AppDelegate, SceneDelegate, AppCoordinator, AppDIContainer, AppConfig
+├── Core/       Dùng chung giữa các tính năng
+│   ├── Domain/     RiotID
+│   ├── Network/    APIClient, APIError
+│   └── UI/         Theme
+└── Features/
+    ├── Player/
+    │   ├── Domain/         Entities/PlayerProfile, Repositories/PlayerRepository, UseCases/GetPlayerProfileUseCase
+    │   ├── Data/           DTOs/PlayerProfileDTO, Repositories/APIPlayerRepository
+    │   └── Presentation/   Search/ và Profile/ (mỗi màn một ViewController + ViewModel)
     └── Matches/
+        ├── Domain/         Entities/MatchSummary, Repositories/MatchRepository, UseCases/GetRecentMatchesUseCase
+        ├── Data/           DTOs/MatchSummaryDTO, Repositories/APIMatchRepository
+        └── Presentation/   MatchesViewController, MatchesViewModel, MatchCell
 ValorantTrackerTests  test parse Riot ID và decode DTO
 ```
 
-Thêm tính năng mới theo thứ tự: entity và protocol repository trong Domain, use case, DTO và repository trong Data, rồi ViewModel và ViewController, cuối cùng nối trong `AppDIContainer`.
+Thêm tính năng mới (ví dụ `Stats`): tạo thư mục trong `Features/` với đủ Domain, Data, Presentation, rồi nối trong `AppDIContainer` và `AppCoordinator`. Các tính năng không gọi thẳng vào nhau; thứ dùng chung đặt trong `Core/`.
 
 ## Việc cần làm tiếp
 

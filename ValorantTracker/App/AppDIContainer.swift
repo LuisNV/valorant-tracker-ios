@@ -6,6 +6,7 @@ final class AppDIContainer {
 
     private lazy var apiClient = APIClient(baseURL: AppConfig.baseURL)
     private lazy var playerRepository: PlayerRepository = APIPlayerRepository(client: apiClient)
+    private lazy var matchRepository: MatchRepository = APIMatchRepository(client: apiClient)
 
     func makeSearchViewModel() -> SearchViewModel {
         SearchViewModel(getPlayerProfile: DefaultGetPlayerProfileUseCase(repository: playerRepository))
@@ -18,7 +19,7 @@ final class AppDIContainer {
     func makeMatchesViewModel(riotID: RiotID) -> MatchesViewModel {
         MatchesViewModel(
             riotID: riotID,
-            getRecentMatches: DefaultGetRecentMatchesUseCase(repository: playerRepository)
+            getRecentMatches: DefaultGetRecentMatchesUseCase(repository: matchRepository)
         )
     }
 }

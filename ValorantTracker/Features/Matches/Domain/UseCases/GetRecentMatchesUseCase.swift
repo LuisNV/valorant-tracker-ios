@@ -6,9 +6,9 @@ protocol GetRecentMatchesUseCase {
 
 final class DefaultGetRecentMatchesUseCase: GetRecentMatchesUseCase {
 
-    private let repository: PlayerRepository
+    private let repository: MatchRepository
 
-    init(repository: PlayerRepository) {
+    init(repository: MatchRepository) {
         self.repository = repository
     }
 
